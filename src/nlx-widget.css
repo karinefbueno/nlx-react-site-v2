@@ -1,0 +1,24 @@
+/* Garante que o widget NLX permaneça visível e funcional */
+[data-nlx-widget],
+.nlx-widget,
+#nlx-widget,
+.nlx-touchpoint {
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Previne conflitos com outros elementos */
+[data-nlx-widget] * {
+  box-sizing: border-box;
+}
+
+/* Garante que o botão do chat seja sempre clicável */
+[data-nlx-widget] button,
+.nlx-widget button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}

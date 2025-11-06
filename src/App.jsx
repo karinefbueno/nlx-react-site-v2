@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Index'
@@ -8,38 +8,24 @@ import Client from './pages/Client'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Services from './pages/Services'
+import { useNLX } from './hooks/useNLX'
+import './nlx-widget.css'
 
 function App() {
+  const location = useLocation();
+  const { initializeNLX, ensureVisibility } = useNLX();
+
   useEffect(() => {
-    // Verifica se já foi inicializado para evitar duplicação
-    if (window.nlxInitialized) {
-      return;
-    }
+    initializeNLX();
+  }, [initializeNLX]);
 
-    const initNLX = async () => {
-      try {
-        const { create } = await import("https://unpkg.com/@nlxai/touchpoint-ui/lib/index.js?module");
-        await create({
-          config: {
-            applicationUrl: "https://apps.nlx.ai/c/zdJAiYo8xgLBDSnaFlSOa/ZpXp912JV_Cct9ZvNw4zQ",
-            headers: {
-              "nlx-api-key": "9X4tdtxGP2enr0is3xASmojH"
-            },
-            languageCode: "en-US",
-          },
-          input: "voiceMini",
-          bidirectional: {}
-        });
-        
-        window.nlxInitialized = true;
-        console.log('NLX initialized successfully');
-      } catch (error) {
-        console.error('Error initializing NLX:', error);
-      }
-    };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ensureVisibility();
+    }, 200);
 
-    initNLX();
-  }, []);
+    return () => clearTimeout(timer);
+  }, [location.pathname, ensureVisibility]);
   return (
     <>
       <Header />
