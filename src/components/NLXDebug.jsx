@@ -4,7 +4,8 @@ const NLXDebug = () => {
   const [status, setStatus] = useState({
     initialized: false,
     widgetFound: false,
-    visible: false
+    visible: false,
+    sessionId: null
   });
 
   useEffect(() => {
@@ -28,7 +29,8 @@ const NLXDebug = () => {
         widgetFound: !!widget,
         visible: widget ? 
           window.getComputedStyle(widget).display !== 'none' && 
-          window.getComputedStyle(widget).visibility !== 'hidden' : false
+          window.getComputedStyle(widget).visibility !== 'hidden' : false,
+        sessionId: sessionStorage.getItem('nlx-conversation-id')
       });
     };
 
@@ -57,6 +59,7 @@ const NLXDebug = () => {
       <div>Initialized: {status.initialized ? '✅' : '❌'}</div>
       <div>Widget Found: {status.widgetFound ? '✅' : '❌'}</div>
       <div>Visible: {status.visible ? '✅' : '❌'}</div>
+      <div>Session: {status.sessionId ? '✅' : '❌'}</div>
     </div>
   );
 };

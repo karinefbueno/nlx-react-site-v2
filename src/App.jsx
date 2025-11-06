@@ -9,6 +9,7 @@ import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Services from './pages/Services'
 import { NLXProvider, useNLXContext } from './contexts/NLXProvider'
+import NLXDebug from './components/NLXDebug'
 import './nlx-widget.css'
 
 function AppContent() {
@@ -35,6 +36,7 @@ function AppContent() {
         </Routes>
       </main>
       <Footer />
+      <NLXDebug />
     </>
   )
 }

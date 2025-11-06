@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalScripts } from '../hooks/useGlobalScripts';
+import { getConfig, saveSessionState, getSessionState } from '../services/nlxConfigService';
 
 const NLXContext = createContext();
 
@@ -15,7 +16,46 @@ export const useNLXContext = () => {
 export const NLXProvider = ({ children }) => {
   const nlxInstance = useRef(null);
   const isInitializing = useRef(false);
+  const sessionId = useRef(null);
+  const config = useRef(getConfig());
   const navigate = useNavigate();
+
+  // Generate or retrieve conversation ID with localStorage persistence
+  if (!sessionId.current) {
+    const savedState = getSessionState();
+    sessionId.current = savedState?.conversationId || 
+      (crypto?.randomUUID ? crypto.randomUUID() : `conv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+    
+    // Save session state to localStorage
+    saveSessionState({
+      conversationId: sessionId.current,
+      initialized: false
+    });
+    
+    console.log('NLX Conversation ID:', sessionId.current);
+  }
+
+  const handleNavigationCommand = (action, destinationText, destinationUrls) => {
+    console.log('NLX Navigation Command:', action, destinationText, destinationUrls);
+    
+    switch (action) {
+      case 'page_next':
+        navigate(1);
+        break;
+      case 'page_previous':
+        navigate(-1);
+        break;
+      case 'page_custom':
+        if (destinationText?.startsWith('/')) {
+          navigate(destinationText);
+        } else if (destinationUrls && destinationUrls[destinationText]) {
+          navigate(destinationUrls[destinationText]);
+        }
+        break;
+      default:
+        console.log('Unknown navigation action:', action);
+    }
+  };
 
   const handleCustomCommand = (action, payload) => {
     console.log('NLX Custom Command:', action, payload);
@@ -68,7 +108,10 @@ export const NLXProvider = ({ children }) => {
     isInitializing.current = true;
 
     try {
-      if (nlxInstance.current?.destroy) {
+      if (nlxInstance.current?.teardown) {
+        nlxInstance.current.teardown();
+        nlxInstance.current = null;
+      } else if (nlxInstance.current?.destroy) {
         nlxInstance.current.destroy();
         nlxInstance.current = null;
       }
@@ -77,14 +120,16 @@ export const NLXProvider = ({ children }) => {
       
       nlxInstance.current = await create({
         config: {
-          applicationUrl: "https://apps.nlx.ai/c/zdJAiYo8xgLBDSnaFlSOa/ZpXp912JV_Cct9ZvNw4zQ",
+          applicationUrl: config.current.applicationUrl,
           headers: {
-            "nlx-api-key": "9X4tdtxGP2enr0is3xASmojH"
+            "nlx-api-key": config.current.apiKey
           },
-          languageCode: "en-US",
+          languageCode: config.current.languageCode,
+          conversationId: sessionId.current
         },
         input: "voiceMini",
         bidirectional: {
+          navigation: handleNavigationCommand,
           custom: handleCustomCommand
         },
         ui: {
@@ -95,6 +140,13 @@ export const NLXProvider = ({ children }) => {
 
       window.nlxInitialized = true;
       console.log('NLX initialized successfully');
+      
+      // Update session state
+      saveSessionState({
+        conversationId: sessionId.current,
+        initialized: true,
+        lastActivity: Date.now()
+      });
       
       setTimeout(ensureVisibility, 500);
 
@@ -110,20 +162,19 @@ export const NLXProvider = ({ children }) => {
     initializeNLX();
 
     // Cleanup only on app unmount
-    const handleBeforeUnload = () => {
+    return () => {
+      console.log('NLXProvider unmounting - cleaning up...');
       try {
-        if (nlxInstance.current?.destroy) {
+        if (nlxInstance.current?.teardown) {
+          nlxInstance.current.teardown();
+        } else if (nlxInstance.current?.destroy) {
           nlxInstance.current.destroy();
         }
+        nlxInstance.current = null;
+        window.nlxInitialized = false;
       } catch (e) {
-        console.warn('Error destroying NLX instance', e);
+        console.warn('Error destroying NLX instance on unmount:', e);
       }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
