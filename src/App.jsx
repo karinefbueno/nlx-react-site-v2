@@ -9,6 +9,7 @@ import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Services from './pages/Services'
 import { useNLX } from './hooks/useNLX'
+import NLXDebug from './components/NLXDebug'
 import './nlx-widget.css'
 
 function App() {
@@ -20,10 +21,17 @@ function App() {
   }, [initializeNLX]);
 
   useEffect(() => {
-    // Apenas garante visibilidade nas trocas de página, sem reinicializar
+    // Garante visibilidade nas trocas de página com múltiplas tentativas
     if (isInitialized()) {
-      const timer = setTimeout(ensureVisibility, 300);
-      return () => clearTimeout(timer);
+      const timer1 = setTimeout(ensureVisibility, 100);
+      const timer2 = setTimeout(ensureVisibility, 500);
+      const timer3 = setTimeout(ensureVisibility, 1000);
+      
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
     }
   }, [location.pathname, ensureVisibility, isInitialized]);
   return (
@@ -41,6 +49,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <NLXDebug />
     </>
   )
 }

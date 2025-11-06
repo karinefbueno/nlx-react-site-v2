@@ -2,23 +2,44 @@
 [data-nlx-widget],
 .nlx-widget,
 #nlx-widget,
-.nlx-touchpoint {
+.nlx-touchpoint,
+iframe[src*="nlx"],
+iframe[src*="touchpoint"] {
   position: fixed !important;
   z-index: 9999 !important;
   pointer-events: auto !important;
   visibility: visible !important;
   opacity: 1 !important;
   display: block !important;
+  transform: none !important;
 }
 
 /* Previne conflitos com outros elementos */
-[data-nlx-widget] * {
+[data-nlx-widget] *,
+.nlx-widget * {
   box-sizing: border-box;
 }
 
 /* Garante que o botão do chat seja sempre clicável */
 [data-nlx-widget] button,
-.nlx-widget button {
+.nlx-widget button,
+[data-nlx-widget] [role="button"],
+.nlx-widget [role="button"] {
   pointer-events: auto !important;
   cursor: pointer !important;
+  user-select: none !important;
+}
+
+/* Previne que outros estilos interfiram */
+[data-nlx-widget],
+.nlx-widget {
+  font-family: inherit !important;
+  line-height: normal !important;
+}
+
+/* Garante que animações não quebrem o widget */
+[data-nlx-widget] *,
+.nlx-widget * {
+  animation-play-state: running !important;
+  transition: all 0.3s ease !important;
 }
