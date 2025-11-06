@@ -52,7 +52,17 @@ export const useNLX = () => {
   }, []);
 
   const initializeNLX = useCallback(async () => {
-    if (isInitializing.current || window.nlxInitialized) {
+    // Avoid race / double-init
+    if (isInitializing.current) return;
+
+    // If global flag exists but instance is missing => allow reinit
+    if (window.nlxInitialized && !nlxInstance.current) {
+      console.warn('nlxInitialized flag is set but instance is missing — reinitializing');
+      window.nlxInitialized = false;
+    }
+
+    // If already initialized and instance exists, nothing to do
+    if (window.nlxInitialized && nlxInstance.current) {
       return;
     }
 
@@ -107,11 +117,27 @@ export const useNLX = () => {
     } finally {
       isInitializing.current = false;
     }
-  }, [ensureVisibility]);
+  }, [ensureVisibility, handleCustomCommand]);
+
+  // Cleanup on unmount: destroy instance and clear global flag
+  useEffect(() => {
+    return () => {
+      try {
+        if (nlxInstance.current?.destroy) {
+          nlxInstance.current.destroy();
+        }
+      } catch (e) {
+        console.warn('Error destroying NLX instance on unmount', e);
+      } finally {
+        nlxInstance.current = null;
+        window.nlxInitialized = false;
+      }
+    };
+  }, []);
 
   return {
     initializeNLX,
     ensureVisibility,
-    isInitialized: () => window.nlxInitialized
+    isInitialized: () => !!window.nlxInitialized && !!nlxInstance.current
   };
 };

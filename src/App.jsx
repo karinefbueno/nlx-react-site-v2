@@ -13,7 +13,7 @@ import './nlx-widget.css'
 
 function App() {
   const location = useLocation();
-  const { initializeNLX, ensureVisibility } = useNLX();
+  const { initializeNLX, ensureVisibility, isInitialized } = useNLX();
 
   useEffect(() => {
     initializeNLX();
@@ -21,11 +21,16 @@ function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      ensureVisibility();
-    }, 200);
+      if (!isInitialized()) {
+        console.log('NLX not initialized, reinitializing...');
+        initializeNLX();
+      } else {
+        ensureVisibility();
+      }
+    }, 500);
 
     return () => clearTimeout(timer);
-  }, [location.pathname, ensureVisibility]);
+  }, [location.pathname, ensureVisibility, initializeNLX, isInitialized]);
   return (
     <>
       <Header />
