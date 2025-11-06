@@ -8,32 +8,18 @@ import Client from './pages/Client'
 import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Services from './pages/Services'
-import { useNLX } from './hooks/useNLX'
-import NLXDebug from './components/NLXDebug'
+import { NLXProvider, useNLXContext } from './contexts/NLXProvider'
 import './nlx-widget.css'
 
-function App() {
+function AppContent() {
   const location = useLocation();
-  const { initializeNLX, ensureVisibility, isInitialized } = useNLX();
+  const { ensureVisibility } = useNLXContext();
 
   useEffect(() => {
-    initializeNLX();
-  }, [initializeNLX]);
+    const timer = setTimeout(ensureVisibility, 300);
+    return () => clearTimeout(timer);
+  }, [location.pathname, ensureVisibility]);
 
-  useEffect(() => {
-    // Garante visibilidade nas trocas de página com múltiplas tentativas
-    if (isInitialized()) {
-      const timer1 = setTimeout(ensureVisibility, 100);
-      const timer2 = setTimeout(ensureVisibility, 500);
-      const timer3 = setTimeout(ensureVisibility, 1000);
-      
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
-      };
-    }
-  }, [location.pathname, ensureVisibility, isInitialized]);
   return (
     <>
       <Header />
@@ -49,8 +35,15 @@ function App() {
         </Routes>
       </main>
       <Footer />
-      <NLXDebug />
     </>
+  )
+}
+
+function App() {
+  return (
+    <NLXProvider>
+      <AppContent />
+    </NLXProvider>
   )
 }
 
