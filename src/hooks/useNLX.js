@@ -119,19 +119,22 @@ export const useNLX = () => {
     }
   }, [ensureVisibility, handleCustomCommand]);
 
-  // Cleanup on unmount: destroy instance and clear global flag
+  // Only cleanup on actual app unmount (not on route changes)
   useEffect(() => {
-    return () => {
+    const handleBeforeUnload = () => {
       try {
         if (nlxInstance.current?.destroy) {
           nlxInstance.current.destroy();
         }
       } catch (e) {
-        console.warn('Error destroying NLX instance on unmount', e);
-      } finally {
-        nlxInstance.current = null;
-        window.nlxInitialized = false;
+        console.warn('Error destroying NLX instance', e);
       }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 

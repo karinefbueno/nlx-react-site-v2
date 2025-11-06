@@ -20,17 +20,12 @@ function App() {
   }, [initializeNLX]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isInitialized()) {
-        console.log('NLX not initialized, reinitializing...');
-        initializeNLX();
-      } else {
-        ensureVisibility();
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [location.pathname, ensureVisibility, initializeNLX, isInitialized]);
+    // Apenas garante visibilidade nas trocas de página, sem reinicializar
+    if (isInitialized()) {
+      const timer = setTimeout(ensureVisibility, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, ensureVisibility, isInitialized]);
   return (
     <>
       <Header />
