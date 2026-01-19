@@ -4,8 +4,8 @@ const SESSION_KEY = 'nlx_session_state';
 
 // Default configuration
 const DEFAULT_CONFIG = {
-  applicationUrl: "https://apps.nlx.ai/c/8Urxv3YgaUG7KukhGaK1N/jRPDbXC3tSxZ80nzGam9G",
-  apiKey: "l-ifvAV0XEVhNnsjq5_1hd8D",
+  applicationUrl: "https://bots.studio.nlx.ai/c/Bd1ZQVnU4R5wi1BszG0mA/dCGt0lsdeAWLOhSlkHgeS",
+  apiKey: "I-ifvAVOXEVhNnsjg5_1hd8D",
   languageCode: "en-US"
 };
 
