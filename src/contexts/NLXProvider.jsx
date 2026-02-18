@@ -141,7 +141,7 @@ export const NLXProvider = ({ children }) => {
       window.nlxInitialized = true;
       console.log('NLX initialized successfully');
       
-      // Update session state
+      // Update session state.
       saveSessionState({
         conversationId: sessionId.current,
         initialized: true,
