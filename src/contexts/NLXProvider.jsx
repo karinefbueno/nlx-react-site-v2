@@ -172,7 +172,7 @@ export const NLXProvider = ({ children }) => {
   useEffect(() => {
     initializeNLX();
 
-    // Cleanup only on app unmount
+    // Cleanup only on app unmount.
     return () => {
       console.log('NLXProvider unmounting - cleaning up...');
       try {
