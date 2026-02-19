@@ -35,8 +35,8 @@ export const NLXProvider = ({ children }) => {
     console.log('NLX Conversation ID:', sessionId.current);
   }
 
-  const handleNavigationCommand = (action, destinationText, destinationUrls) => {
-    console.log('NLX Navigation Command:', action, destinationText, destinationUrls);
+  const handleNavigation = (action, destination, destinationUrls) => {
+    console.log('NLX Navigation:', { action, destination, destinationUrls });
     
     switch (action) {
       case 'page_next':
@@ -46,23 +46,14 @@ export const NLXProvider = ({ children }) => {
         navigate(-1);
         break;
       case 'page_custom':
-        if (destinationText?.startsWith('/')) {
-          navigate(destinationText);
-        } else if (destinationUrls && destinationUrls[destinationText]) {
-          navigate(destinationUrls[destinationText]);
+        if (destination?.startsWith('/')) {
+          navigate(destination);
+        } else if (destinationUrls?.[destination]) {
+          navigate(destinationUrls[destination]);
+        } else if (destination) {
+          window.location.href = destination;
         }
         break;
-      default:
-        console.log('Unknown navigation action:', action);
-    }
-  };
-
-  const handleCustomCommand = (action, payload) => {
-    console.log('NLX Custom Command:', action, payload);
-    
-    if (action === 'nlx:destination' && payload?.uri) {
-      console.log('Navigating to:', payload.uri);
-      navigate(payload.uri);
     }
   };
 
@@ -129,8 +120,7 @@ export const NLXProvider = ({ children }) => {
         },
         input: "voiceMini",
         bidirectional: {
-          navigation: handleNavigationCommand,
-          custom: handleCustomCommand
+          navigation: handleNavigation
         },
         ui: {
           persistent: true,
