@@ -46,12 +46,14 @@ export const NLXProvider = ({ children }) => {
         navigate(-1);
         break;
       case 'page_custom':
-        if (destination?.startsWith('/')) {
-          navigate(destination);
-        } else if (destinationUrls?.[destination]) {
-          navigate(destinationUrls[destination]);
-        } else if (destination) {
-          window.location.href = destination;
+      case 'Navigation':
+        const target = destination || destinationUrls?.[''];
+        if (!target || target === '#') return;
+        
+        if (target.startsWith('/')) {
+          navigate(target);
+        } else {
+          window.location.href = target;
         }
         break;
     }
