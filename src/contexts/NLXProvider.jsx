@@ -47,8 +47,27 @@ export const NLXProvider = ({ children }) => {
         break;
       case 'page_custom':
       case 'Navigation':
-        const target = destination || destinationUrls?.[''];
-        if (!target || target === '#') return;
+        // If destination is provided, use it directly or look it up in destinationUrls
+        let target = destination;
+        
+        // If no destination but we have destinationUrls, try to find a valid target
+        if (!target && destinationUrls) {
+          // Look for the first non-# value that's not empty string
+          for (const [key, value] of Object.entries(destinationUrls)) {
+            if (value && value !== '#' && key !== '') {
+              target = value;
+              break;
+            }
+          }
+        } else if (target && destinationUrls?.[target]) {
+          // If destination is a key in destinationUrls, resolve it
+          target = destinationUrls[target];
+        }
+        
+        if (!target || target === '#') {
+          console.log('No valid navigation target');
+          return;
+        }
         
         if (target.startsWith('/')) {
           navigate(target);
