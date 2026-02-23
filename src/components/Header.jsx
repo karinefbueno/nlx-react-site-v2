@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import logo from "/assets/images/logo.png";
+import { useLanguage } from '../i18n/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
+import './Header.css';
 
 export default function Header() {
+  const { t } = useLanguage();
+  
   return (
     <header className="header_section">
       <div className="container">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link className="navbar-brand" to="/">
-            <img src={logo} alt="NLX Motors logo" />
+            <img src={logo} alt="Trator logo" />
           </Link>
 
           <button
@@ -25,36 +30,29 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link>
+                <Link className="nav-link" to="/">{t('home')}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/about">About</Link>
+                <Link className="nav-link" to="/about">{t('about')}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/services">Services</Link>
+                <Link className="nav-link" to="/services">{t('services')}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/gallery">Vehicles</Link>
+                <Link className="nav-link" to="/gallery">{t('vehicles')}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/client">Client</Link>
+                <Link className="nav-link" to="/client">{t('client')}</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contact">Contact</Link>
+                <Link className="nav-link" to="/contact">{t('contact')}</Link>
               </li>
             </ul>
+            <LanguageSwitcher />
           </div>
         </nav>
       </div>
-       <div class="call_text_main">
-         <div class="container">
-            <div class="call_taital">
-               <div class="call_text"><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i><span class="padding_left_15">Location</span></a></div>
-               <div class="call_text"><a href="#"><i class="fa fa-phone" aria-hidden="true"></i><span class="padding_left_15">(+71) 8522369417</span></a></div>
-               <div class="call_text"><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i><span class="padding_left_15">demo@gmail.com</span></a></div>
-            </div>
-         </div>
-      </div>
+
     </header>
   );
 }

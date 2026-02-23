@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Hero from '../components/Hero'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export default function Client() {
+  const { t } = useLanguage();
   const [activeSlide, setActiveSlide] = useState(0)
   
   const testimonials = [
@@ -59,7 +61,7 @@ export default function Client() {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="client_taital">What Says Customers</h1>
+              <h1 className="client_taital">{t('whatSaysCustomers')}</h1>
             </div>
           </div>
           

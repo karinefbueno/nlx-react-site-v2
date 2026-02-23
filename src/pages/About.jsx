@@ -1,7 +1,10 @@
 import React from 'react'
 import Hero from '../components/Hero'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export default function About() {
+  const { t } = useLanguage();
+  
   const html = `
       <!-- about section start -->
       <div class="about_section layout_padding">
@@ -13,9 +16,9 @@ export default function About() {
                   </div>
                   <div class="col-md-6"> 
                      <div class="about_taital_box">
-                        <h1 class="about_taital">About <span style="color: #fe5b29;">Us</span></h1>
-                        <p class="about_text">We believe that every journey begins with trust, and every road tells a story worth remembering. Our mission is to provide a seamless car buying experience where design, performance, and reliability meet. Each model in our collection is carefully chosen to match your lifestyle and ambitions. Whether you seek innovation, comfort, or adventure, we make sure your next drive is unforgettable. </p>
-                        <div class="readmore_btn"><a href="#">Read More</a></div>
+                        <h1 class="about_taital">${t('about')} <span style="color: #fe5b29;">${t('aboutUs').split(' ')[1] || 'Us'}</span></h1>
+                        <p class="about_text">${t('aboutText')}</p>
+                        <div class="readmore_btn"><a href="#">${t('readMore')}</a></div>
                      </div>
                   </div>
                </div>

@@ -1,7 +1,9 @@
 import React from "react";
 import logo from "/assets/images/logo.png";
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
 
   return (
     <footer className="footer_section layout_padding">
@@ -17,35 +19,34 @@ export default function Footer() {
         <div className="footer_section_2">
           <div className="row">
             <div className="col">
-              <h4 className="footer_taital">Subscribe Now</h4>
+              <h4 className="footer_taital">{t('subscribeNow')}</h4>
               <p className="footer_text">
-                Join Tractor and explore a world of powerful SUVs and thrilling sports cars — all built to move your dreams.
+                {t('subscribeText')}
               </p>
               <div className="form-group">
                 <textarea
                   className="update_mail"
-                  placeholder="Enter Your Email"
+                  placeholder={t('enterYourEmail')}
                   rows="5"
                   id="comment"
                   name="Enter Your Email"
                 ></textarea>
                 <div className="subscribe_bt">
-                  <a href="#">Subscribe</a>
+                  <a href="#">{t('subscribe')}</a>
                 </div>
               </div>
             </div>
 
             <div className="col">
-              <h4 className="footer_taital">Information</h4>
+              <h4 className="footer_taital">{t('information')}</h4>
               <p className="lorem_text">
-                Explore the world of Tractor — where innovation meets the open road. From reliable SUVs to high-performance
-                sports cars, we bring you vehicles that inspire every journey.
+                {t('informationText')}
               </p>
             </div>
 
             <div className="col">
               <h4 className="footer_taital" style={{ color: "#ffffff" }}>
-                Helpful Links
+                {t('helpfulLinks')}
               </h4>
               <p className="lorem_text" style={{ color: "#ffffff", marginBottom: "10px" }}>
                 BMW Cars:{" "}
@@ -72,18 +73,18 @@ export default function Footer() {
             </div>
 
             <div className="col">
-              <h4 className="footer_taital">Investments</h4>
+              <h4 className="footer_taital">{t('investments')}</h4>
               <p className="lorem_text">
-                There are many variations of passages of Lorem Ipsum available, but the majority.
+                {t('investmentsText')}
               </p>
             </div>
 
             <div className="col">
-              <h4 className="footer_taital">Contact Us</h4>
+              <h4 className="footer_taital">{t('contact')}</h4>
               <div className="location_text">
                 <a href="#">
                   <i className="fa fa-map-marker" aria-hidden="true"></i>
-                  <span className="padding_left_15">Location</span>
+                  <span className="padding_left_15">{t('location')}</span>
                 </a>
               </div>
               <div className="location_text">

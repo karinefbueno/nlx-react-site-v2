@@ -1,6 +1,8 @@
 import React from "react";
+import { useLanguage } from '../i18n/LanguageContext';
 
 const Home = () => {
+  const { t } = useLanguage();
 
   return (
     <div>
@@ -14,15 +16,15 @@ const Home = () => {
                   <div className="carousel-item active">
                     <div className="banner_taital_main">
                       <h1 className="banner_taital">
-                        Car Rent <br />
-                        <span style={{ color: "#fe5b29" }}>For You</span>
+                        {t('carRentForYou')} <br />
+                        <span style={{ color: "#fe5b29" }}>{t('forYou')}</span>
                       </h1>
                       <p className="banner_text">
-                        Find your ideal car from a wide selection of models and enjoy the ride every single day
+                        {t('findIdealCar')}
                       </p>
                       <div className="btn_main">
-                        <div className="contact_bt"><a href="#">Read More</a></div>
-                        <div className="contact_bt active"><a href="#">Contact Us</a></div>
+                        <div className="contact_bt"><a href="#">{t('readMore')}</a></div>
+                        <div className="contact_bt active"><a href="#">{t('contactUs')}</a></div>
                       </div>
                     </div>
                   </div>
@@ -36,7 +38,7 @@ const Home = () => {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="banner_img"><img src="/images/banner-img.png" alt="banner" /></div>
+              <div className="banner_img"><img src="/assets/images/logo.png" alt="Trator" /></div>
             </div>
           </div>
         </div>

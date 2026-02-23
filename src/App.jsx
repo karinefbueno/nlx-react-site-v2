@@ -9,6 +9,7 @@ import Contact from './pages/Contact'
 import Gallery from './pages/Gallery'
 import Services from './pages/Services'
 import { NLXProvider, useNLXContext } from './contexts/NLXProvider'
+import { LanguageProvider } from './i18n/LanguageContext'
 import NLXDebug from './components/NLXDebug'
 import './nlx-widget.css'
 
@@ -43,9 +44,11 @@ function AppContent() {
 
 function App() {
   return (
-    <NLXProvider>
-      <AppContent />
-    </NLXProvider>
+    <LanguageProvider>
+      <NLXProvider>
+        <AppContent />
+      </NLXProvider>
+    </LanguageProvider>
   )
 }
 
